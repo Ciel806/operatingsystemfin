@@ -1,0 +1,123 @@
+1) Jelaskan cara kerja algoritma C-SCAN dan C-LOOK dengan kata-katamu sendiri.
+a. C-SCAN (Circular SCAN)
+    C-SCAN adalah algoritma penjadwalan disk yang mirip dengan SCAN, tetapi pergerakan head-nya bersifat "sirkular".
+    Head bergerak dari satu ujung disk ke ujung lainnya (misal dari 0 ke 199 pada disk dengan 200 silinder), melayani semua permintaan yang ditemui di sepanjang jalur.
+    Ketika mencapai ujung, head langsung kembali ke ujung awal tanpa melayani permintaan selama perjalanan balik, lalu mulai lagi dari awal.
+
+Contoh:
+Jika head bergerak ke kanan (dari 0 ke 199), setelah mencapai 199, ia langsung kembali ke 0 dan melanjutkan layanan.
+
+b. C-LOOK
+    C-LOOK adalah variasi dari LOOK yang lebih efisien.
+    Head bergerak maju (misal dari low to high) melayani permintaan yang ada di jalurnya.
+    Ketika tidak ada lagi permintaan di arah tersebut, head langsung kembali ke permintaan terendah (tanpa perlu ke ujung disk) dan melanjutkan layanan.
+
+Contoh:
+Jika head bergerak ke kanan (dari 50 ke 100), dan tidak ada lagi permintaan di atas 100, ia langsung kembali ke permintaan terkecil (misal 20) tanpa melewati 0.
+
+gws
+🔹 C-SCAN (Circular SCAN):
+C-SCAN bekerja seperti lift yang hanya naik ke atas, dan ketika sampai di lantai paling atas, dia langsung kembali ke lantai paling bawah tanpa berhenti, lalu mulai naik lagi.
+Dalam konteks hard disk:
+    Head bergerak ke arah tertentu (misalnya ke kanan, menuju track terbesar).
+    Saat sudah mencapai track paling akhir, head langsung lompat ke track paling awal (track 0) tanpa melayani permintaan di jalan kembali.
+    Setelah itu, lanjut melayani permintaan lagi ke arah semula.
+
+🔹 C-LOOK:
+C-LOOK mirip C-SCAN, tapi lebih "hemat langkah".
+    Head hanya bergerak sejauh permintaan terjauh dalam arah tertentu, bukan ke ujung disk.
+    Setelah itu, head kembali ke permintaan terkecil dan mulai lagi ke arah semula.
+
+
+2) Bandingkan hasil total pergerakan head antara kedua algoritma untuk input yang sama.
+Misal:
+Lokasi head awal: 50
+Arah: Ke kanan (menuju silinder lebih besar)
+Permintaan: [82, 170, 43, 140, 24, 16, 190]
+
+a. C-SCAN
+Urutan layanan: 50 → 82 → 140 → 170 → 190 → (199) → 0 → 16 → 24 → 43
+Total pergerakan:
+50→82 = 32
+82→140 = 58
+140→170 = 30
+170→190 = 20
+190→199 = 9
+199→0 = 199
+0→16 = 16
+16→24 = 8
+24→43 = 19
+Total = 391
+
+b. C-LOOK
+Urutan layanan: 50 → 82 → 140 → 170 → 190 → 16 → 24 → 43
+Total pergerakan:
+50→82 = 32
+82→140 = 58
+140→170 = 30
+170→190 = 20
+190→16 = 174 (langsung balik ke terendah)
+16→24 = 8
+24→43 = 19
+Total = 341
+
+Kesimpulan: C-LOOK lebih efisien karena tidak perlu ke ujung disk saat balik.
+
+
+gws
+Contoh input:
+
+Head start: 45
+
+Arah awal: naik
+
+Queue: 70, 10, 85, 20, 95, 30
+
+🔹 C-SCAN hasil (misalnya):
+Perjalanan: 45 → 70 → 85 → 95 → lompat ke 0 → 10 → 20 → 30
+Total pergerakan: dihitung semua jarak antara track, termasuk lompatan ke 0
+Biasanya lebih panjang, karena selalu ke ujung disk
+
+🔹 C-LOOK hasil (misalnya):
+Perjalanan: 45 → 70 → 85 → 95 → kembali ke 10 → 20 → 30
+Tidak pergi ke ujung disk (hanya sejauh permintaan terjauh)
+Total pergerakan lebih pendek dari C-SCAN
+
+🟰 Kesimpulan:
+Untuk input yang sama, C-LOOK biasanya menghasilkan total pergerakan yang lebih sedikit daripada C-SCAN karena lebih efisien dalam membatasi jarak tempuh.
+
+3) Sebutkan kelebihan dan kekurangan dari masing-masing algoritma.
+C-SCAN
+KELEBIHAN: Adil karena semua permintaan di layani secara merata.
+kekurangan: Tidak efisien karena head selalu ke ujung disk meski tidak diperlukan.
+
+C-LOOK
+kelebihan: Lebih cepat karena head tidak perlu ke ujung disk.
+kekurangan: Bisa menyebabkan starvation jika permintaan baru terus datang di arah yang sama.
+
+gws
+C-SCAN:
+kelebihan: Adil: setiap permintaan mendapat perlakuan setara (karena arah tetap)
+kekurangan: Pergerakan bisa jauh, karena selalu sampai ke ujung
+
+C-LOOK:
+kelebihan: Lebih efisien: hanya bergerak sejauh permintaan paling jauh	
+kekurangan: Bisa dianggap "kurang adil" jika permintaan di ujung jarang diproses
+
+
+4) Berikan satu contoh kasus nyata (di dunia komputasi atau sistem operasi) yang cocok untuk
+masing-masing algoritma.
+a. C-SCAN
+Kasus: Sistem penyimpanan cloud dengan beban tinggi dan permintaan tersebar merata di seluruh disk.
+    C-SCAN cocok karena memastikan semua permintaan dilayani tanpa diskriminasi.
+
+b. C-LOOK
+Kasus: Database server yang sering mengakses data dalam rentang tertentu (misal log transaksi terbaru).
+    C-LOOK lebih efisien karena head tidak perlu melewati area kosong, langsung kembali ke data terendah yang diperlukan.
+
+gws
+🔹 C-SCAN:
+Sangat cocok untuk sistem multi-user seperti server database atau sistem antrian cetak (print server), di mana keadilan (fairness) lebih penting daripada kecepatan, karena semua permintaan akan diproses secara merata tanpa memprioritaskan lokasi.
+
+🔹 C-LOOK:
+Cocok untuk sistem embedded atau SSD controller, di mana efisiensi dan kecepatan lebih diutamakan daripada keadilan. Contohnya pada sistem streaming video atau pemrosesan real-time data sensor.
