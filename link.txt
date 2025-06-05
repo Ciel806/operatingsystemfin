@@ -1,0 +1,11 @@
+LRU
+https://prepinsta.com/operating-systems/page-replacement-algorithms/least-recently-used-lru-algorithm/lru-page-replacement-algorithm-in-c/
+
+Optimal
+https://prepinsta.com/operating-systems/page-replacement-algorithms/optimal-page-replacement/optimal-page-replacement-in-c/
+
+C-SCAN
+https://www.easycodingzone.com/2021/07/c-program-for-c-scan-disk-scheduling.html?m=1
+
+C-LOOK
+https://www.easycodingzone.com/2021/07/c-program-of-c-look-disk-scheduling.html?m=1
